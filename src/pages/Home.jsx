@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { service as appwriteService } from "../appwrite";
-import { Container } from "../components";
+import { Container,PostCard } from "../components";
+import { useSelector } from "react-redux";
 
 function Home() {
   let [posts, setPosts] = useState([]);
+  const authStatus = useSelector(state => state.auth.status);
+
   useEffect(() => {
     appwriteService.listPosts().then((posts) => {
       if (posts) {
@@ -18,9 +21,15 @@ function Home() {
         <Container>
           <div className="flex flex-wrap">
             <div className="p-2 w-full">
-              <h1 className="text-2xl font-bold hover:text-gray-500">
-                Post Something to read posts
-              </h1>
+              {authStatus ? (
+                <h1 className="text-2xl font-bold hover:text-gray-500">
+                  Post Something
+                </h1>
+              ) : (
+                <h1 className="text-2xl font-bold hover:text-gray-500">
+                  Login to See Blogs
+                </h1>
+              )}
             </div>
           </div>
         </Container>
